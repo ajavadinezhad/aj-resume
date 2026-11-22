@@ -313,8 +313,8 @@ body { height: 100dvh; overflow: hidden; background: #101b24; color: #edf4ed; }
   .welcome { top: calc(70px + env(safe-area-inset-top)); left: 20px; right: 20px; max-width: none; }
   .welcome h1 { font-size: clamp(2rem, 8.5vw, 2.7rem); line-height: .98; letter-spacing: -.055em; }
   .welcome p { font-size: .75rem; margin-block: .4rem; max-width: 44ch; }
-  .lab-stage { top: calc(220px + env(safe-area-inset-top)); bottom: calc(40px + env(safe-area-inset-bottom)); }
-  .station { min-height: 44px; min-width: 44px; font-size: .72rem; padding: .45rem .65rem; touch-action: manipulation; }
+  .lab-stage { top: calc(195px + env(safe-area-inset-top)); bottom: calc(40px + env(safe-area-inset-bottom)); }
+  .station { min-height: 48px; min-width: 48px; font-size: .76rem; padding: .45rem .65rem; touch-action: manipulation; }
   .scene-hint { bottom: calc(10px + env(safe-area-inset-bottom)); left: 20px; font-size: .72rem; }
   .desktop-window, .desktop-window.maximized {
     left: 8px !important;
