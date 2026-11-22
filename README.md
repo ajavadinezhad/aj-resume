@@ -1,6 +1,6 @@
 # Ahmad Javadi Nezhad
 
-**Computer architecture and systems software**  
+**Computer architecture, systems & quantum computing**  
 PhD researcher in Computer Science at Stony Brook University · COMPAS Lab
 
 [GitHub](https://github.com/ajavadinezhad) · [LinkedIn](https://www.linkedin.com/in/ajavadinezhad) · [Email](mailto:ahmad.javadinezhad@stonybrook.edu) · [Portfolio source](index.html)
