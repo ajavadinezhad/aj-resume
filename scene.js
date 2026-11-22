@@ -245,13 +245,36 @@
     }
     renderer.render(scene, camera);
 
-    for (const { link, point } of stations) {
+    const labels = stations.map(({ link, point }) => {
       projected.copy(point).applyMatrix4(rig.matrixWorld).project(camera);
-      const x = (projected.x + 1) * width / 2;
-      const y = (1 - projected.y) * height / 2;
-      const pad = link.offsetWidth / 2 + 6;
-      link.style.setProperty('--x', Math.max(pad, Math.min(width - pad, x)) + 'px');
-      link.style.setProperty('--y', Math.max(14, Math.min(height - 14, y)) + 'px');
+      const pad = link.offsetWidth / 2 + 8;
+      return {
+        link, width: link.offsetWidth, height: link.offsetHeight,
+        x: Math.max(pad, Math.min(width - pad, (projected.x + 1) * width / 2)),
+        y: Math.max(28, Math.min(height - 28, (1 - projected.y) * height / 2))
+      };
+    });
+    if (width <= 650) {
+      // Separate projected touch targets while keeping them near their components.
+      labels.sort((a, b) => a.y - b.y);
+      for (let pass = 0; pass < 8; pass++) {
+        for (let i = 0; i < labels.length; i++) {
+          for (let j = i + 1; j < labels.length; j++) {
+            const a = labels[i];
+            const b = labels[j];
+            const gap = (a.height + b.height) / 2 + 6;
+            if (Math.abs(a.x - b.x) < (a.width + b.width) / 2 + 6 && b.y - a.y < gap) {
+              const shift = (gap - (b.y - a.y)) / 2;
+              a.y = Math.max(26, a.y - shift);
+              b.y = Math.min(height - 26, b.y + shift);
+            }
+          }
+        }
+      }
+    }
+    for (const { link, x, y } of labels) {
+      link.style.setProperty('--x', x + 'px');
+      link.style.setProperty('--y', y + 'px');
     }
     lab.classList.add('is-live');
     if (visible && move) queueDraw();
@@ -279,12 +302,13 @@
     camera.position.addScaledVector(right, -shift);
     camera.lookAt(new T.Vector3(0, .42, 0).addScaledVector(right, -shift));
     camera.updateProjectionMatrix();
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, width <= 650 ? 1.5 : 2));
     renderer.setSize(width, height, false);
     queueDraw();
   }
 
   stage.addEventListener('pointermove', event => {
+    if (event.pointerType === 'touch') return;
     pointerInside = true;
     const rect = stage.getBoundingClientRect();
     if (rect.width && rect.height) {
