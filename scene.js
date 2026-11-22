@@ -289,12 +289,14 @@
     height = stage.clientHeight;
     if (!width || !height) return;
     const aspect = width / height;
-    const span = Math.max(4.6, 4.9 / aspect);
+    const phone = width <= 650;
+    const span = phone ? Math.max(4.2, 3.8 / aspect) : Math.max(4.6, 4.9 / aspect);
     camera.left = -span * aspect;
     camera.right = span * aspect;
     camera.top = span;
     camera.bottom = -span;
-    camera.position.set(6.6, 8.7, 10.5);
+    if (phone) camera.position.set(10, 12, 2);
+    else camera.position.set(6.6, 8.7, 10.5);
     camera.lookAt(0, .42, 0);
     camera.updateMatrixWorld();
     const right = new T.Vector3().setFromMatrixColumn(camera.matrixWorld, 0);
