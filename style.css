@@ -314,7 +314,7 @@ body { height: 100dvh; overflow: hidden; background: #101b24; color: #edf4ed; }
   .welcome h1 { font-size: clamp(2rem, 8.5vw, 2.7rem); line-height: .98; letter-spacing: -.055em; }
   .welcome p { font-size: .75rem; margin-block: .4rem; max-width: 44ch; }
   .lab-stage { top: calc(195px + env(safe-area-inset-top)); bottom: calc(40px + env(safe-area-inset-bottom)); }
-  .station { min-height: 48px; min-width: 48px; font-size: .76rem; padding: .45rem .65rem; touch-action: manipulation; }
+  .station { min-height: 32px; min-width: 44px; font-size: .65rem; padding: .25rem .45rem; touch-action: none; }
   .scene-hint { bottom: calc(10px + env(safe-area-inset-bottom)); left: 20px; font-size: .72rem; }
   .desktop-window, .desktop-window.maximized {
     left: 8px !important;
@@ -340,4 +340,32 @@ body { height: 100dvh; overflow: hidden; background: #101b24; color: #edf4ed; }
   .welcome p { font-size: .68rem; }
   .lab-stage { top: 56px; bottom: 24px; }
   .lab figcaption { display: none; }
+}
+
+
+.touch-help, .reset-view { display: none; }
+@media (pointer: coarse) {
+  .lab-stage, .station { touch-action: none; }
+  .desktop-help { display: none; }
+  .touch-help { display: inline; }
+  .reset-view {
+    display: block;
+    position: absolute;
+    z-index: 3;
+    right: 16px;
+    bottom: calc(5px + env(safe-area-inset-bottom));
+    min-height: 44px;
+    padding: .3rem .7rem;
+    border: 1px solid #a4c8ae70;
+    border-radius: 20px;
+    background: #172e2de8;
+    color: #e7f9dd;
+    font: inherit;
+    font-size: .72rem;
+  }
+  .scene-hint { max-width: calc(100% - 125px); }
+}
+@media (max-width: 650px) {
+  .lab-stage { touch-action: none; }
+  .station span { width: .4rem; height: .4rem; }
 }
