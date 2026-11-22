@@ -192,6 +192,69 @@
   let width = 0;
   let height = 0;
   let targetRotation = 0;
+  let touchYaw = 0;
+  let touchTilt = 0;
+  let zoom = 1;
+  let suppressClickUntil = 0;
+  let gestureMoved = false;
+  const touches = new Map();
+  let gestureStart = null;
+
+  function beginGesture() {
+    const points = [...touches.values()];
+    gestureStart = {
+      points: points.map(point => ({ ...point })),
+      yaw: touchYaw, tilt: touchTilt, zoom,
+      distance: points.length > 1 ? Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y) : 0
+    };
+  }
+  stage.addEventListener('pointerdown', event => {
+    if (event.pointerType !== 'touch') return;
+    if (!touches.size) gestureMoved = false;
+    touches.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    if (touches.size > 1) gestureMoved = true;
+    beginGesture();
+  });
+  stage.addEventListener('pointermove', event => {
+    if (!touches.has(event.pointerId)) return;
+    touches.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    const points = [...touches.values()];
+    if (points.length > 1 && gestureStart.distance > 0) {
+      const distance = Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y);
+      zoom = Math.max(.75, Math.min(2.4, gestureStart.zoom * distance / gestureStart.distance));
+      camera.zoom = zoom;
+      camera.updateProjectionMatrix();
+      gestureMoved = true;
+    } else if (points.length === 1) {
+      const dx = points[0].x - gestureStart.points[0].x;
+      const dy = points[0].y - gestureStart.points[0].y;
+      if (Math.hypot(dx, dy) > 8) gestureMoved = true;
+      touchYaw = gestureStart.yaw + dx * .009;
+      touchTilt = Math.max(-.45, Math.min(.45, gestureStart.tilt + dy * .005));
+    }
+    queueDraw();
+  });
+  function endGesture(event) {
+    if (!touches.delete(event.pointerId)) return;
+    if (gestureMoved) suppressClickUntil = performance.now() + 450;
+    beginGesture();
+    queueDraw();
+  }
+  // Window-level tracking keeps a drag continuous when a finger crosses a label.
+  window.addEventListener('pointerup', endGesture);
+  window.addEventListener('pointercancel', endGesture);
+  stage.addEventListener('click', event => {
+    if (performance.now() < suppressClickUntil) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  }, true);
+  document.querySelector('.reset-view').addEventListener('click', () => {
+    touchYaw = touchTilt = 0;
+    zoom = camera.zoom = 1;
+    camera.updateProjectionMatrix();
+    queueDraw();
+  });
   document.querySelector('.theme-switch').addEventListener('click', () => {
     sunlight.intensity = document.body.classList.contains('daylight') ? 3.6 : 2.8;
     queueDraw();
@@ -213,9 +276,10 @@
     frame = 0;
     if (!width || !height) return;
     const move = !motion.matches;
-    targetRotation = move ? pointer.x * .19 : 0;
-    rig.rotation.y += (targetRotation - rig.rotation.y) * .055;
-    rig.rotation.x += ((move ? pointer.y * .1 : 0) - rig.rotation.x) * .055;
+    targetRotation = touchYaw + (move ? pointer.x * .19 : 0);
+    rig.rotation.y = touches.size || motion.matches ? targetRotation : rig.rotation.y + (targetRotation - rig.rotation.y) * .15;
+    const targetTilt = touchTilt + (move ? pointer.y * .1 : 0);
+    rig.rotation.x = touches.size || motion.matches ? targetTilt : rig.rotation.x + (targetTilt - rig.rotation.x) * .15;
     orbit.rotation.z = move ? time * .00047 : 0;
     const seconds = move ? time / 1000 : 0;
     for (const { packet, x1, z1, x2, z2, length, offset } of packets) {
