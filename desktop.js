@@ -1,6 +1,6 @@
 (() => {
   const layer = document.querySelector('.window-layer');
-  const names = { about: 'About AJ', research: 'Research', software: 'Public software', papers: 'Publications', education: 'Education & teaching', skills: 'Technical skills' };
+  const names = { about: 'About AJ', research: 'Research', software: 'Public software', papers: 'Publications', education: 'Education & teaching', skills: 'Technical skills', contact: 'Contact' };
   const windows = new Map();
   let level = 10;
 
@@ -33,7 +33,7 @@
     win.querySelector('.close').addEventListener('click', () => {
       win.remove();
       windows.delete(id);
-      document.querySelector('.dock a[href="#' + id + '"]').focus();
+      document.querySelector('.stations a[href="#' + id + '"]').focus();
       history.replaceState(null, '', '#home');
     });
     win.querySelector('.maximize').addEventListener('click', event => {
