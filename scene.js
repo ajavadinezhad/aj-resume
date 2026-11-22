@@ -108,7 +108,28 @@
     box(rig, width, .015, depth, 0xb6cb87, x, .028, z);
   }
 
+  const circuitObjects = [quantum, software, publications];
+  const modules = [
+    { id: 'about', x: -2.5, z: 1.65, color: 0xa6d9c0 },
+    { id: 'education', x: -.6, z: -1.95, color: 0xd9c394 },
+    { id: 'skills', x: 2.3, z: 1.6, color: 0x92b7e4 },
+    { id: 'contact', x: -1.1, z: 1.7, color: 0xedb4ba }
+  ];
+  for (const item of modules) {
+    const chip = new T.Group();
+    chip.position.set(item.x, 0, item.z);
+    chip.userData.section = item.id;
+    box(chip, .82, .15, .7, 0x34493c, 0, .13, 0);
+    box(chip, .59, .22, .47, item.color, 0, .31, 0);
+    for (const x of [-.27, 0, .27]) {
+      for (const side of [-1, 1]) box(chip, .07, .06, .18, 0xe8d9a1, x, .13, side * .4);
+    }
+    rig.add(chip);
+    circuitObjects.push(chip);
+  }
+
   const stations = [
+    ...modules.map(item => ({ link: lab.querySelector('.' + item.id + '-pin'), point: new T.Vector3(item.x, .7, item.z) })),
     { link: lab.querySelector('.research-pin'), point: new T.Vector3(-2.1, 1.92, -.72) },
     { link: lab.querySelector('.software-pin'), point: new T.Vector3(1.9, 1.88, -.96) },
     { link: lab.querySelector('.papers-pin'), point: new T.Vector3(.85, .75, 1.75) }
@@ -130,11 +151,11 @@
     const pick = new T.Vector2(2 * (event.clientX - bounds.left) / bounds.width - 1,
       1 - 2 * (event.clientY - bounds.top) / bounds.height);
     raycaster.setFromCamera(pick, camera);
-    const hit = raycaster.intersectObjects([quantum, software, publications], true)[0];
+    const hit = raycaster.intersectObjects(circuitObjects, true)[0];
     if (!hit) return;
     let object = hit.object;
     while (object && !object.userData.section) object = object.parent;
-    if (object) document.querySelector('.dock a[href="#' + object.userData.section + '"]').click();
+    if (object) document.querySelector('.stations a[href="#' + object.userData.section + '"]').click();
   });
 
   function draw(time) {
