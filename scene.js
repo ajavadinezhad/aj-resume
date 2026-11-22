@@ -77,13 +77,16 @@
   publications.userData.section = 'papers';
   rig.add(publications);
 
+  const serverLights = [];
   for (let rack = 0; rack < 3; rack++) {
     const x = 1.08 + rack * .6;
     box(software, .49, 1.6, .83, lilac, x, .8, -.95);
     box(software, .38, 1.44, .045, 0x494969, x, .8, -.52);
     for (let tray = 0; tray < 5; tray++) {
       box(software, .28, .12, .045, 0x7a78a2, x, .28 + tray * .25, -.49);
-      box(software, .04, .04, .04, 0xc7f99b, x + .085, .28 + tray * .25, -.455);
+      const led = box(software, .04, .04, .04, 0xc7f99b, x + .085, .28 + tray * .25, -.455);
+      led.material = led.material.clone();
+      serverLights.push(led);
     }
   }
 
@@ -122,6 +125,27 @@
       (x1 + x2) / 2, .025, (z1 + z2) / 2);
   }
 
+  const packetGeometry = new T.SphereGeometry(.045, 8, 6);
+  const packetMaterial = new T.MeshBasicMaterial({ color: 0xeaffae });
+  const packets = [];
+  for (const [index, route] of routes.entries()) {
+    const [[x1, z1], [x2, z2]] = route;
+    const length = Math.hypot(x2 - x1, z2 - z1);
+    if (length < .01) continue;
+    for (let lane = 0; lane < 2; lane++) {
+      const packet = new T.Mesh(packetGeometry, packetMaterial);
+      rig.add(packet);
+      packets.push({ packet, x1, z1, x2, z2, length, offset: lane * .5 + index * .13 });
+    }
+  }
+
+  const coreMaterial = new T.MeshStandardMaterial({
+    color: 0xd8ffd1, emissive: 0x79d89b, emissiveIntensity: .7, roughness: .3
+  });
+  const core = new T.Mesh(new T.IcosahedronGeometry(.16, 1), coreMaterial);
+  core.position.set(0, 1.64, 0);
+  quantum.add(core);
+
   const circuitObjects = [quantum, software, publications];
   const modules = [
     { id: 'about', x: -2.5, z: 1.9, color: 0xa6d9c0 },
@@ -148,6 +172,19 @@
     { link: lab.querySelector('.software-pin'), point: new T.Vector3(1.9, 1.88, -.96) },
     { link: lab.querySelector('.papers-pin'), point: new T.Vector3(.7, .85, 1.05) }
   ];
+  const hoverRings = new Map();
+  for (const object of circuitObjects) {
+    const material = new T.MeshBasicMaterial({ color: 0xc9ffa5, transparent: true, opacity: 0, depthWrite: false });
+    const ring = new T.Mesh(new T.TorusGeometry(.6, .025, 8, 48), material);
+    ring.rotation.x = -Math.PI / 2;
+    if (object === software) ring.position.set(1.68, .07, -.95);
+    else if (object === publications) ring.position.set(.7, .07, 1.05);
+    else ring.position.copy(object.position).setY(.07);
+    rig.add(ring);
+    hoverRings.set(object.userData.section, ring);
+  }
+  let hovered = null;
+  let pointerInside = false;
   const pointer = new T.Vector2();
   const projected = new T.Vector3();
   let frame = 0;
@@ -180,6 +217,32 @@
     rig.rotation.y += (targetRotation - rig.rotation.y) * .055;
     rig.rotation.x += ((move ? pointer.y * .1 : 0) - rig.rotation.x) * .055;
     orbit.rotation.z = move ? time * .00047 : 0;
+    const seconds = move ? time / 1000 : 0;
+    for (const { packet, x1, z1, x2, z2, length, offset } of packets) {
+      const progress = (seconds * .65 / length + offset) % 1;
+      packet.position.set(x1 + (x2 - x1) * progress, .085, z1 + (z2 - z1) * progress);
+    }
+    for (const [index, led] of serverLights.entries()) {
+      const pulse = move ? .3 + .7 * Math.pow((Math.sin(seconds * 2.4 + index * 1.9) + 1) / 2, 3) : .6;
+      led.material.emissive.setHex(0x8fe599);
+      led.material.emissiveIntensity = pulse;
+    }
+    core.rotation.y = seconds * .65;
+    core.position.y = 1.64 + (move ? Math.sin(seconds * 1.6) * .045 : 0);
+    coreMaterial.emissiveIntensity = .6 + (move ? (Math.sin(seconds * 1.7) + 1) * .3 : 0);
+
+    rig.updateMatrixWorld(true);
+    if (pointerInside) {
+      raycaster.setFromCamera(new T.Vector2(pointer.x, -pointer.y), camera);
+      const hit = raycaster.intersectObjects(circuitObjects, true)[0];
+      let object = hit?.object;
+      while (object && !object.userData.section) object = object.parent;
+      hovered = object?.userData.section ?? null;
+    } else hovered = null;
+    stage.style.cursor = hovered ? 'pointer' : '';
+    for (const [id, ring] of hoverRings) {
+      ring.material.opacity = id === hovered ? .75 : 0;
+    }
     renderer.render(scene, camera);
 
     for (const { link, point } of stations) {
@@ -222,13 +285,19 @@
   }
 
   stage.addEventListener('pointermove', event => {
+    pointerInside = true;
     const rect = stage.getBoundingClientRect();
     if (rect.width && rect.height) {
       pointer.set(2 * (event.clientX - rect.left) / rect.width - 1,
         2 * (event.clientY - rect.top) / rect.height - 1);
     }
+    queueDraw();
   });
-  stage.addEventListener('pointerleave', () => pointer.set(0, 0));
+  stage.addEventListener('pointerleave', () => {
+    pointerInside = false;
+    pointer.set(0, 0);
+    queueDraw();
+  });
   motion.addEventListener('change', queueDraw);
   new IntersectionObserver(([entry]) => {
     visible = entry.isIntersecting;
