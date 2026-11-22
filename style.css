@@ -287,3 +287,17 @@ body { height: 100dvh; overflow: hidden; background: #101b24; color: #edf4ed; }
   .desktop-window { left: 12px !important; top: 64px !important; max-height: calc(100dvh - 158px); }
 }
 @media (prefers-reduced-motion: reduce) { .dock a { transition: none; } }
+
+.about-pin { --station-color: #a6d9c0; left: 11%; top: 70%; }
+.education-pin { --station-color: #d9c394; left: 40%; top: 12%; }
+.skills-pin { --station-color: #92b7e4; right: 7%; bottom: 25%; }
+.contact-pin { --station-color: #edb4ba; left: 29%; bottom: 12%; }
+.scene-hint { bottom: 20px; }
+.lab figcaption { bottom: 20px; }
+.desktop-window { max-height: calc(100dvh - 120px); }
+.desktop-window.maximized { height: calc(100dvh - 82px); }
+@media (max-width: 650px) {
+  .desktop-window { max-height: calc(100dvh - 82px); }
+  .scene-hint { bottom: 12px; }
+  .station { font-size: .64rem; padding: .35rem .45rem; }
+}
