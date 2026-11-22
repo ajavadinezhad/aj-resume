@@ -301,3 +301,43 @@ body { height: 100dvh; overflow: hidden; background: #101b24; color: #edf4ed; }
   .scene-hint { bottom: 12px; }
   .station { font-size: .64rem; padding: .35rem .45rem; }
 }
+
+/* Phone layout keeps the entire circuit available above the browser controls. */
+@media (max-width: 650px) {
+  .desktop-bar {
+    height: calc(56px + env(safe-area-inset-top));
+    padding: env(safe-area-inset-top) max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left));
+  }
+  .theme-switch { min-height: 44px; padding-inline: 12px; }
+  .identity { min-height: 44px; }
+  .welcome { top: calc(70px + env(safe-area-inset-top)); left: 20px; right: 20px; max-width: none; }
+  .welcome h1 { font-size: clamp(2rem, 8.5vw, 2.7rem); line-height: .98; letter-spacing: -.055em; }
+  .welcome p { font-size: .75rem; margin-block: .4rem; max-width: 44ch; }
+  .lab-stage { top: calc(220px + env(safe-area-inset-top)); bottom: calc(40px + env(safe-area-inset-bottom)); }
+  .station { min-height: 44px; min-width: 44px; font-size: .72rem; padding: .45rem .65rem; touch-action: manipulation; }
+  .scene-hint { bottom: calc(10px + env(safe-area-inset-bottom)); left: 20px; font-size: .72rem; }
+  .desktop-window, .desktop-window.maximized {
+    left: 8px !important;
+    top: calc(64px + env(safe-area-inset-top)) !important;
+    width: calc(100% - 16px);
+    height: calc(100dvh - 76px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    max-height: none;
+  }
+  .window-bar { cursor: default; min-height: 56px; padding: .3rem .45rem .3rem 1rem; }
+  .window-bar button { width: 44px; height: 44px; }
+  .window-bar .maximize { display: none; }
+  .window-content { min-height: 0; padding: 1.1rem; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; overflow-wrap: anywhere; }
+  .window-content p, .window-content li, .window-content dd { font-size: 1rem; }
+  .window-content .project-grid { grid-template-columns: 1fr; }
+  .window-content .contact-links { flex-wrap: wrap; }
+  .window-content .contact-links a { padding-block: .6rem; }
+  .skills div { grid-template-columns: 1fr; gap: 0; margin-bottom: .8rem; }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .welcome { top: 70px; left: 20px; max-width: 30%; }
+  .welcome h1 { font-size: 1.9rem; }
+  .welcome p { font-size: .68rem; }
+  .lab-stage { top: 56px; bottom: 24px; }
+  .lab figcaption { display: none; }
+}
