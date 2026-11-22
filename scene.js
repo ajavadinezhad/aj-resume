@@ -91,7 +91,7 @@
     const y = .08 + book * .17;
     const cover = book === 1 ? 0xd5d496 : peach;
     const group = new T.Group();
-    group.position.set(.7, y, 1.54);
+    group.position.set(.7, y, 1.05);
     group.rotation.y = -.18 + book * .19;
     publications.add(group);
     box(group, 1.44, .13, .99, 0xf9e7bc, 0, 0, 0);
@@ -99,21 +99,35 @@
     box(group, .08, .16, 1.05, cover, -.73, 0, 0);
   }
 
-  for (const [x, z] of [[-2.7, 1.95], [2.8, 1.92], [-2.8, -1.98], [2.8, -2]]) {
-    box(rig, .6, .13, .6, 0x475c3f, x, .065, z);
-    box(rig, .36, .2, .36, 0x35493a, x, .2, z);
-    box(rig, .24, .025, .24, 0xc4d596, x, .31, z);
+  // Mounting pads sit outside the component footprints.
+  for (const [x, z] of [[-3.12, -2.35], [3.12, -2.35], [-3.12, 2.35], [3.12, 2.35]]) {
+    model(rig, new T.CylinderGeometry(.11, .11, .035, 20), 0xd3c794, x, .025, z);
   }
-  for (const [x, z, width, depth] of [[-.55, -.65, 1.1, .07], [.18, .46, .07, 2.24], [1.2, 1.57, 2.05, .07], [2.23, .62, .07, 1.95], [-1.65, 1.06, 2.55, .07]]) {
-    box(rig, width, .015, depth, 0xb6cb87, x, .028, z);
+
+  // A shared bus crosses the clear middle lane. Branches end at component edges.
+  const routes = [
+    [[-2.5, .25], [2.75, .25]],
+    [[-1.86, -.65 + .9], [-1.86, .25]],
+    [[1.68, -.95 + .415], [1.68, .25]],
+    [[-.8, .25], [-.8, .9 - .44]],
+    [[.7, .25], [.7, 1.05 - .55]],
+    [[-2.5, .25], [-2.5, 1.9 - .44]],
+    [[2.5, .25], [2.5, 1.9 - .44]],
+    [[2.75, .25], [2.75, -2.05 + .44]]
+  ];
+  for (const route of routes) {
+    const [[x1, z1], [x2, z2]] = route;
+    box(rig, Math.max(.055, Math.abs(x2 - x1)), .014,
+      Math.max(.055, Math.abs(z2 - z1)), 0xb6cb87,
+      (x1 + x2) / 2, .025, (z1 + z2) / 2);
   }
 
   const circuitObjects = [quantum, software, publications];
   const modules = [
-    { id: 'about', x: -2.5, z: 1.65, color: 0xa6d9c0 },
-    { id: 'education', x: -.6, z: -1.95, color: 0xd9c394 },
-    { id: 'skills', x: 2.3, z: 1.6, color: 0x92b7e4 },
-    { id: 'contact', x: -1.1, z: 1.7, color: 0xedb4ba }
+    { id: 'about', x: -2.5, z: 1.9, color: 0xa6d9c0 },
+    { id: 'education', x: -.8, z: .9, color: 0xd9c394 },
+    { id: 'skills', x: 2.75, z: -2.05, color: 0x92b7e4 },
+    { id: 'contact', x: 2.5, z: 1.9, color: 0xedb4ba }
   ];
   for (const item of modules) {
     const chip = new T.Group();
@@ -132,7 +146,7 @@
     ...modules.map(item => ({ link: lab.querySelector('.' + item.id + '-pin'), point: new T.Vector3(item.x, .7, item.z) })),
     { link: lab.querySelector('.research-pin'), point: new T.Vector3(-2.1, 1.92, -.72) },
     { link: lab.querySelector('.software-pin'), point: new T.Vector3(1.9, 1.88, -.96) },
-    { link: lab.querySelector('.papers-pin'), point: new T.Vector3(.85, .75, 1.75) }
+    { link: lab.querySelector('.papers-pin'), point: new T.Vector3(.7, .85, 1.05) }
   ];
   const pointer = new T.Vector2();
   const projected = new T.Vector3();
