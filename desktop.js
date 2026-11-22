@@ -43,7 +43,7 @@
     win.addEventListener('pointerdown', () => focusWindow(win));
     const bar = win.querySelector('.window-bar');
     bar.addEventListener('pointerdown', event => {
-      if (event.target.closest('button') || win.classList.contains('maximized')) return;
+      if (matchMedia('(max-width: 650px)').matches || event.target.closest('button') || win.classList.contains('maximized')) return;
       const bounds = win.getBoundingClientRect();
       const start = { x: event.clientX, y: event.clientY };
       bar.setPointerCapture(event.pointerId);
