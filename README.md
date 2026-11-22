@@ -48,4 +48,4 @@ C, C++, Go, Python, JavaScript, Bash · Linux, RISC-V, SIMT, QEMU, musl, Qiskit 
 
 ---
 
-Open `index.html` in a browser to view or print the portfolio. The site can be served from the repository root with GitHub Pages. The interactive systems lab loads [Three.js r180](https://github.com/mrdoob/three.js/releases/tag/r180) from jsDelivr and needs WebGL 2. Open sections through the 3D objects or the desktop dock. Résumé windows can be dragged, maximized, and closed. The dock also works when WebGL is unavailable.
+Open `index.html` in a browser to view or print the portfolio. The site can be served from the repository root with GitHub Pages. The interactive systems lab loads [Three.js r180](https://github.com/mrdoob/three.js/releases/tag/r180) from jsDelivr and needs WebGL 2. Open sections through the 3D objects and their labels. Résumé windows can be dragged, maximized, and closed. The station labels also work when WebGL is unavailable.
