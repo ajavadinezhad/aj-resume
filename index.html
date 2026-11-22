@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Explore Ahmad Javadi Nezhad’s research and software in an interactive systems lab.">
+<title>AJ — Systems Lab</title>
+<link rel="stylesheet" href="style.css">
+<script src="desktop.js" defer></script>
+<script src="scene.js" defer></script>
+</head>
+<body>
+<header class="desktop-bar">
+  <a class="identity" href="#home"><b>AJ</b><span>Systems Lab</span></a>
+  <span class="bar-note">Ahmad Javadi Nezhad</span>
+  <button class="theme-switch" type="button" aria-label="Switch to daylight">Daylight ☼</button>
+</header>
+<main id="main">
+  <div class="welcome"><p>Ahmad Javadi Nezhad</p><h1>Small world.<br>Big systems.</h1><p>PhD researcher · Stony Brook University</p></div>
+      <figure class="lab" aria-labelledby="lab-title">
+        <div class="lab-stage">
+          <div class="lab-backdrop" aria-hidden="true">
+            <div class="board">
+              <div class="board-grid"></div>
+              <div class="board-object board-rings"></div>
+              <div class="board-object board-racks"></div>
+              <div class="board-object board-papers"></div>
+            </div>
+          </div>
+          <div class="lab-canvas" aria-hidden="true"></div>
+          <div class="stations" aria-label="Lab stations">
+            <a class="station research-pin" href="#research"><span></span>Research</a>
+            <a class="station software-pin" href="#software"><span></span>Software</a>
+            <a class="station papers-pin" href="#papers"><span></span>Publications</a>
+          </div>
+        </div>
+        <figcaption>
+          <strong id="lab-title">The systems lab</strong>
+          <span>Choose a station to explore <span aria-hidden="true">↗</span></span>
+        </figcaption>
+      </figure>
+  <p class="scene-hint">Move to look around · Select a station to open it</p>
+</main>
+<nav class="dock" aria-label="Open a résumé window">
+  <a href="#about"><span aria-hidden="true">AJ</span><small>About</small></a>
+  <a href="#research"><span aria-hidden="true">◎</span><small>Research</small></a>
+  <a href="#software"><span aria-hidden="true">▦</span><small>Software</small></a>
+  <a href="#papers"><span aria-hidden="true">▤</span><small>Papers</small></a>
+  <a href="#education"><span aria-hidden="true">◇</span><small>Education</small></a>
+  <a href="#skills"><span aria-hidden="true">⌘</span><small>Skills</small></a>
+  <a href="mailto:ahmad.javadinezhad@stonybrook.edu"><span aria-hidden="true">↗</span><small>Contact</small></a>
+</nav>
+<div class="window-layer" aria-live="polite"></div>
+<template id="content-about">
+<section><p class="label">Computer architecture &amp; systems software</p><h2>Ahmad Javadi Nezhad</h2>
+<p>PhD researcher at Stony Brook University. I work on hybrid quantum-classical scheduling, GPU memory, and distributed systems.</p>
+<div class="contact-links"><a href="https://github.com/ajavadinezhad">GitHub ↗</a><a href="https://www.linkedin.com/in/ajavadinezhad">LinkedIn ↗</a><a href="mailto:ahmad.javadinezhad@stonybrook.edu">Email ↗</a></div>
+</section></template>
+<template id="content-research">    <section>
+      <h2>Research</h2>
+      <div>
+        <article>
+          <p class="label">Stony Brook · COMPAS Lab · 2025–Present</p>
+          <h3>Graduate Research Assistant</h3>
+          <section aria-labelledby="isochrone">
+            <h4 id="isochrone">Isochrone</h4>
+            <p>Hybrid quantum-classical scheduling simulator and SQD benchmarks.</p>
+          </section>
+          <section aria-labelledby="neomantis">
+            <h4 id="neomantis">NeoMantis</h4>
+            <p>Distributed sequence indexing CLI and MetaGraph benchmarks.</p>
+          </section>
+          <section aria-labelledby="mpsp">
+            <h4 id="mpsp">MPSP</h4>
+            <p>Ported Node.js and Memcached to RISC-V SIMT.</p>
+          </section>
+        </article>
+        <article>
+          <p class="label">Sharif · HPCAN Lab · 2020–2024</p>
+          <h3>Researcher</h3>
+          <p>GPU memory latency and cache efficiency.</p>
+        </article>
+      </div>
+    </section></template>
+<template id="content-software">    <section>
+      <h2>Public software</h2>
+      <div class="project-grid">
+        <article>
+          <p class="label">Linux / Wayland</p>
+          <h3><a href="https://github.com/ajavadinezhad/mellipi-os">Mellipi OS ↗</a></h3>
+          <p>Native Wayland desktop with signed updates.</p>
+        </article>
+        <article>
+          <p class="label">GNOME / Wayland</p>
+          <h3><a href="https://github.com/ajavadinezhad/linux-desktop-control">Linux Desktop Control ↗</a></h3>
+          <p>Supervised GNOME desktop automation.</p>
+        </article>
+        <article>
+          <p class="label">Go / Android</p>
+          <h3><a href="https://github.com/ajavadinezhad/zyrln">Zyrln ↗</a></h3>
+          <p>Go proxy and Android VPN for censorship circumvention.</p>
+        </article>
+        <article>
+          <p class="label">Python / Data quality</p>
+          <h3><a href="https://github.com/ajavadinezhad/DataMender">DataMender ↗</a></h3>
+          <p>CSV and Parquet profiling and cleaning.</p>
+        </article>
+      </div>
+    </section></template>
+<template id="content-papers">    <section>
+      <h2>Publications</h2>
+      <ul class="papers">
+        <li><a href="https://www.microarch.org/micro59/program/">Lazy-LLC: Reducing GPU LLC Thrashing with Shared-Data and Reusability Filters</a><span>IEEE/ACM MICRO · 2026</span></li>
+        <li><a href="https://doi.org/10.1007/978-3-032-22193-3_24">A Simulator for Next Generation SSDs with Networked Backend Architecture</a><span>Springer CCIS · 2026</span></li>
+        <li><a href="https://upcommons.upc.edu/server/api/core/bitstreams/3134a849-90c8-41e8-a657-f3f8faec4412/content">A Low-latency On-chip Cache Hierarchy for Load-to-use Stall Reduction in GPUs</a><span>ACM TACO · 2025</span></li>
+        <li><a href="https://dblp.org/rec/journals/tjs/MirzaeiSGZGKNHALS25">MQSimNet: an open-source simulator for next-generation network-based SSDs</a><span>J. Supercomputing · 2025</span></li>
+        <li><a href="https://dblp.org/rec/journals/tjs/GheibiFetratSAMKNLS25">A comprehensive review and classification of micro-scale and macro-scale interconnection network simulators for research and education in network-based computing systems</a><span>J. Supercomputing · 2025</span></li>
+        <li><a href="https://doi.org/10.1007/s11227-025-07078-0">A survey of SSD simulators and emulators</a><span>J. Supercomputing · 2025</span></li>
+      </ul>
+    </section></template>
+<template id="content-education">    <section>
+      <h2>Education &amp; teaching</h2>
+      <div>
+        <article>
+          <p class="label">Jan 2025–Present</p>
+          <h3>Stony Brook University</h3>
+          <p>PhD studies in Computer Science · Michael Ferdman</p>
+          <p>Teaching assistant · Software Engineering</p>
+        </article>
+        <article>
+          <p class="label">2020–2023</p>
+          <h3>Sharif University of Technology</h3>
+          <p>MSc, Computer Systems Architecture · Hamid Sarbazi-Azad</p>
+          <p>Teaching assistant · Computer Architecture</p>
+        </article>
+      </div>
+    </section></template>
+<template id="content-skills">    <section>
+      <h2>Technical skills</h2>
+      <dl class="skills">
+        <div><dt>Languages</dt><dd>C, C++, Go, Python, JavaScript, Bash</dd></div>
+        <div><dt>Systems</dt><dd>Linux, RISC-V, SIMT, QEMU, musl, Qiskit</dd></div>
+        <div><dt>Tools</dt><dd>Git, Docker, GDB, perf</dd></div>
+      </dl>
+    </section></template>
+</body>
+</html>
